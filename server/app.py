@@ -108,6 +108,11 @@ async def game_loop():
 async def startup_event():
     asyncio.create_task(game_loop())
 
+@app.on_event("shutdown")
+async def shutdown_event():
+    for websocket in connected_clients:
+        await websocket.close(code=1001)
+
 
 if __name__ == "__main__":
     import uvicorn
